@@ -1,0 +1,287 @@
+---
+title: "CSSS 503 Notes"
+author: "Caz VanDevere"
+date: "`r format(Sys.Date(), format='%B %d, %Y')`"
+output:
+  html_document:
+    theme: readable
+---
+
+# Week 1 /////////////////////////////////////////////////
+
+```{r}
+library(pander)
+```
+
+Command + enter to run highlighted code, or code where the caret (cursor) is resting
+
+Command + enter repeatedly runs next lines of code
+
+Objects: everything in R is called an object:
+```{r chunk one, echo=FALSE}
+new.object <- 144
+```
+
+
+Vectors: a vector is a series of elements, such as numbers:
+```{r chunk two}
+new.object <- c(4, 9, 16, 25, 36)
+new.object
+```
+
+Matrices, arrays, lists, and dataframes are more complex objects: we will default to dataframes.
+
+#Markdown formatting:
+bold/strong emphasis **bold/strong emphasis**
+italic/normal emphasis *italic/normal emphasis*
+
+# Header
+## Subheader
+### Subsubheader
+> Block quote from
+> famous person
+
+##Lists:
+1. Ordered lists
+1. Are real easy
+  1. Even with sublists
+  1. Or when lazy with numbering
+  
+  * Unordered lists
+* Are also real easy
+  + Also even with sublists
+  
+##URLS:
+  [URLs are trivial](http://www.uw.edu)
+  
+  ![pictures too](https://static.miraheze.org/evanswikiwiki/thumb/9/93/GreenEvans_Title.jpg/320px-GreenEvans_Title.jpg)
+  
+#Chunk Options:
+1. echo=FALSE: Keeps R code from being shown in the document
+1. eval=FALSE: Shows R code in the document without running it
+1. include=FALSE: Hides all output but still runs code
+    1. good for setup chunks where you load packages!
+1. results='hide': Hides R's (non-plot) output from the document cache=TRUE: Saves 1. results of running that chunk so if it takes a while,
+you won't have to re-run it each time you re-knit the document
+1. fig.height=5, fig.width=5: modify the dimensions of any plots that are generated in the chunk (units are in inches)  
+  
+#In-Line R code:
+1. Four score and seven years ago is the same as `r 4*20 + 7` years.
+```{r}
+x <- sqrt(77) # <- is how we assign variables
+```
+  1. The value of `x` rounded to the nearest two decimals is `r round(x, 2)`.
+  1. The value of x rounded to the nearest two decimals is 8.77.
+  
+#Dates:
+format(Sys.Date(), format='%B %d, %Y') says, "format system date as month
+name (%B), day-of-month (%d), and four-digit year (%Y): April 03, 2019. See ?strptime for these format codes.
+  
+# Basic commands:
+```{r}
+# calls data:
+data(cars)
+# views a window of the data:
+#View(cars)
+# for first five rows:
+head(cars, 5)
+# last five rows:
+tail(cars,5)
+# display structure of an object
+str(cars)
+# view a summary of the information (changes depending on the datatype):
+summary(cars)
+```
+
+#Basic Plots:
+```{r}
+# histograms:
+hist(cars$speed)
+hist(cars$dist)
+
+hist(cars$dist,
+     xlab = "Distance (ft)", # X axis label
+     main = "Observed stopping distances of cars") # Title
+```
+
+#Math:
+```{r}
+( dist_mean  <- mean(cars$dist) )
+( speed_mean <- mean(cars$speed) )
+```
+
+```{r}
+plot(dist ~ speed, data = cars,
+     xlab = "Speed (mph)",
+     ylab = "Stopping distance (ft)",
+     main = "Speeds and stopping distances of cars",
+     pch = 16) # Point size
+abline(h = dist_mean, col = "firebrick")
+abline(v = speed_mean, col = "cornflowerblue")
+```
+
+#Swiss Dataset:
+```{r}
+data(swiss)
+pairs(swiss, pch = 8, col = "violet", #this is a useful overview command for smaller datasets
+      main = "Pairwise comparisons of Swiss variables")
+```
+
+#Pander summary table:
+```{r}
+pander(summary(swiss), style = "rmarkdown", split.tables = 120) #80 for regular width, 120 for wide slides
+```
+
+
+
+# Week 2: GGPLOT  /////////////////////////////////////////////////
+
+## Saving files:
+```{r}
+#save(new.object, file="new_object.RData")
+```
+R Data files are highly compressed
+
+## Loading files:
+```{r}
+#load("new_object.RData")
+```
+
+## Get working directory:
+```{r}
+getwd()
+```
+
+## Change Working Directory:
+```{r}
+#setwd("users/Cazvan/Documents")
+```
+
+## Can embed a .r file into a a markdown document using source:
+source()
+
+```{r}
+library(gapminder)
+```
+
+```{r}
+str(gapminder)
+```
+
+## Subsetting Data (slicing):
+
+```{r}
+library(tidyverse)
+```
+
+## Pipes (using magrittr) vs. nesting:
+
+These two lines yield the same results, but the first reads in to out, the second reads left to right sequentially:
+```{r}
+log(mean(gapminder$pop))
+gapminder$pop %>% mean() %>% log()
+```
+
+## Filerting data:
+
+```{r}
+gapminder %>% filter(country == "Oman")
+```
+
+Let's say we want observations from Oman after 1980 and through 2000:
+```{r}
+gapminder %>%
+  filter(country == "Oman" &
+    year > 1980 &
+    year <= 2000 )
+```
+
+## Saving a subset:
+```{r}
+China <- gapminder %>% filter(country == "China")
+head(China, 4)
+```
+
+# GGPLOT
+
+```{r}
+library(ggplot2)
+```
+
+GGplot has two primary components: layers and aesthetics
+
+```{r}
+ggplot(data = China,
+    aes(x = year, y = lifeExp)) +
+  # theme_bw() +
+  geom_point()
+```
+
+## Aesthetics: setting vs. mapping:
+
+Setting: sets a specific value for a thing
+Mapping: tells R to add it's own colors to a set of things (each state is a different color, etc)
+
+## Axis labels, points, no background:
+
+```{r}
+ggplot(data = China,
+      aes(x = year, y = lifeExp)) +
+  geom_point(color = "red", size = 3) + # setting aesthetic
+  xlab("Year") +
+  ylab("Life expectancy") +
+  ggtitle("Life expectancy in China") +
+  theme_bw(base_size=18)
+```
+
+## Facets:
+
+```{r}
+ggplot(data = gapminder,
+      aes(x = year, y = lifeExp,
+        group = country,
+        color = continent)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Life expectancy") +
+  ggtitle("Life expectancy over time") +
+  theme_bw() +
+  facet_wrap(~ continent)
+```
+
+## Saving Plots:
+
+```{r}
+lifeExp_by_year <-
+  ggplot(data = gapminder,
+      aes(x = year, y = lifeExp,
+        group = country, color = continent)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Life expectancy") +
+  ggtitle("Life expectancy over time") +
+  theme_bw() +
+  facet_wrap(~ continent)
+```
+
+Can recall a stored plot by itself, or recall then add layers:
+```{r}
+lifeExp_by_year +
+  theme(legend.position = "bottom")
+```
+
+## Common Problem: Overplotting:
+position_jitter()
+```{r}
+ggplot(data = gapminder, aes(x = continent, y = year, color = continent)) +
+  geom_point()
+
+# vs.
+
+ggplot(data = gapminder, aes(x = continent, y = year, color = continent)) +
+  geom_point(position = position_jitter(width = 0.5, height = 2))
+```
+
+  
+  
+  

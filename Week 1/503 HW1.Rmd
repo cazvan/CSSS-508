@@ -1,0 +1,71 @@
+---
+title: "CSSS 503 Homework 1"
+author: "Caz VanDevere"
+date: "`r format(Sys.Date(), format='%B %d, %Y')`"
+output:
+  html_document:
+    theme: readable
+---
+
+```{r, echo=FALSE}
+library(pander)
+```
+
+
+
+# Introduction
+
+This is a report about a dataset on Swiss socio-economic indicators of each of the 47 provinces in 1888, named 'swiss'.
+```{r, echo=FALSE}
+data(swiss)
+```
+
+First, let's make a Pander summary table:
+```{r, echo=FALSE}
+pander(summary(swiss), style = "rmarkdown", split.tables = 120)
+#80 for regular width, 120 for wide slides
+```
+
+
+
+# Variable Investigation
+
+Do we notice anything interesting in this data? It looks like the infant mortality rate is quite high. Let's dive into this more deeply.
+
+```{r, echo=FALSE}
+hist(swiss$Infant.Mortality,
+    xlab = "Infant Mortality Rate", # X axis label
+    main = "Infant Mortality Rate in the Provinces") # Title
+```
+
+The infant mortality rate appears to follow a normal distribution. with a mean at `r round(mean(swiss$Infant.Mortality),2)`.
+
+Do other statistics follow similar distributional patterns? Let's look at the variable Catholic.
+
+```{r, echo=FALSE}
+hist(swiss$Catholic,
+    xlab = "Percentage Catholic", # X axis label
+    main = "Catholicism in the Provinces") # Title
+```
+
+We see that this variable has a distribution almost completely opposite of the previous variable. Let's investigate whether these variables correspond statistically.
+
+# Ordinary Least Squares Bivariate Regression
+
+To see if there is a statistical correlation between infant mortality rate and Catholic practice, we are going to run an ordinary least squares regression.
+```{r, echo=FALSE}
+testRTW=lm(as.numeric(swiss$Infant.Mortality)~swiss$Catholic,data=swiss)
+summary(testRTW)
+```
+
+The p-value is above .05 and .10., so we can conclude the these two variables do not have a statistically significant correlation. 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
