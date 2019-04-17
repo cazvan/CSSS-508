@@ -1,0 +1,12 @@
+---
+title: "CSSS 503 Homework 3"
+author: "Caz VanDevere"
+date: "`r format(Sys.Date(), format='%B %d, %Y')`"
+output:
+  html_document:
+    theme: readable
+---
+
+```{r, echo=FALSE}
+
+```

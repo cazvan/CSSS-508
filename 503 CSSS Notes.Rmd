@@ -282,6 +282,7 @@ ggplot(data = gapminder, aes(x = continent, y = year, color = continent)) +
   geom_point(position = position_jitter(width = 0.5, height = 2))
 ```
 
+
   
   
   
