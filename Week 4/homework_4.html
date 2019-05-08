@@ -294,9 +294,6 @@ Good job on fac_vec!</code></pre>
 </blockquote>
 </div>
 </div>
-</div>
-<div id="no-work-past-the-first-part-of-this-section" class="section level1">
-<h1>NO WORK PAST THE FIRST PART OF THIS SECTION</h1>
 <div id="coding-with-matrices" class="section level2">
 <h2>2: Coding with Matrices</h2>
 <pre class="r"><code># 1) Use matrix() to create a matrix with 10 rows and four columns filled with NA
@@ -304,15 +301,15 @@ mat_empty &lt;- matrix(NA, nrow=10, ncol=4)
 
 # 2) Assign &quot;vec_num&quot; to the first column of &quot;mat_1&quot; below.
 mat_1 &lt;- mat_empty # DO NOT EDIT THIS LINE; add code below it.
-mat_1 &lt;- NULL
+mat_1 &lt;- matrix(vec_num, nrow=10, ncol=4)
 
 # 3) Assign &quot;vec_int&quot; to the second column of &quot;mat_2&quot; below
 mat_2 &lt;- mat_1 # DO NOT EDIT THIS LINE; add code below it.
-mat_2 &lt;- NULL
+mat_2[,2] &lt;- vec_int
 
 # 4) Assign &quot;vec_cha&quot; and &quot;vec_fac&quot; to the third and fourth columns of &quot;mat_3&quot; using one assignment operator.
 mat_3 &lt;- mat_2 # DO NOT EDIT THIS LINE; add code below it.
-mat_3 &lt;- NULL
+mat_3[,c(4)] &lt;- vec_cha
 
 # 5) Select the fourth row from &quot;mat_3&quot; and assign it to the object &quot;row_4&quot; as a vector.
 row_4 &lt;- NULL
@@ -330,9 +327,10 @@ mat_t &lt;- NULL
 mat_big &lt;- NULL</code></pre>
 <p><em>How’d you do?</em></p>
 <pre><code>Good job on mat_empty!
-No code entered for mat_1 yet.
-No code entered for mat_2 yet.
-No code entered for mat_3 yet.
+Good job on mat_1!
+Good job on mat_2!
+Oh no, check your code for &quot;mat_3&quot;
+- You seem to have an incorrect or misplaced value somewhere!
 No code entered for row_4 yet.
 No code entered for val_6_2 yet.
 No code entered for mat_4 yet.

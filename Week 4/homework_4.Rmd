@@ -181,8 +181,6 @@ new_vec <- c(TRUE, FALSE, TRUE, TRUE)
 
 >Data is converted to NAs
 
-# NO WORK PAST THE FIRST PART OF THIS SECTION
-
 ## 2: Coding with Matrices
 ```{r matrices_1}
 # 1) Use matrix() to create a matrix with 10 rows and four columns filled with NA
@@ -190,15 +188,15 @@ mat_empty <- matrix(NA, nrow=10, ncol=4)
 
 # 2) Assign "vec_num" to the first column of "mat_1" below.
 mat_1 <- mat_empty # DO NOT EDIT THIS LINE; add code below it.
-mat_1 <- NULL
+mat_1 <- matrix(vec_num, nrow=10, ncol=4)
 
 # 3) Assign "vec_int" to the second column of "mat_2" below
 mat_2 <- mat_1 # DO NOT EDIT THIS LINE; add code below it.
-mat_2 <- NULL
+mat_2[,2] <- vec_int
 
 # 4) Assign "vec_cha" and "vec_fac" to the third and fourth columns of "mat_3" using one assignment operator.
 mat_3 <- mat_2 # DO NOT EDIT THIS LINE; add code below it.
-mat_3 <- NULL
+mat_3[,c(3,4)] <- vec_cha
 
 # 5) Select the fourth row from "mat_3" and assign it to the object "row_4" as a vector.
 row_4 <- NULL
