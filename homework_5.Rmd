@@ -1,7 +1,7 @@
 ---
-title: "Homework 5"
+title: "Homework 6"
 author: "Caz VanDevere"
-date: ""`r format(Sys.Date(), format='%B %d, %Y')`""
+date: "`r format(Sys.Date(), format='%B %d, %Y')`"
 output: 
   html_document:
     preserve_yaml: true
@@ -301,7 +301,7 @@ votesbyparty
 # [YOUR CODE HERE]
 (spreadvotes = votesbyparty %>%
   select(Precinct,Race,Demsupport) %>%
-  spread(key= Race, value = Demsupport)) %>%
+  spread(key= Race, value = Demsupport))
 ```
 ```{r}
 
@@ -309,7 +309,11 @@ votesbyparty
 
 
 ```{r}
-(spreadvotes %>% left_join(king_rel_races))
+final=spreadvotes %>% left_join(turnout_rates)
+names(final)[6]<-"Registered"
+names(final)[4]<-"President"
+names(final)[3]<-"LT"
+final
 ```
 
 
@@ -319,23 +323,19 @@ votesbyparty
 
 > Make a scatterplot where the horizontal axis is number of registered voters in the precinct, and the vertical axis is turnout rate. Color the precincts in Seattle one color, and use a different color for other precincts. Do you observe anything?
 
+
 ```{r}
 # [YOUR CODE HERE]
-source1="" #source
-titlecount="" #title for the plot
+#source1="" #source
+#titlecount="" #title for the plot
 
-yearplot=ggplot(data= brfssdata, aes(x=year)) + # create the yearplot object using the main dataset
-  geom_bar(stat = "count", fill="steelblue") + # make the yearplot into a barplot, color it
-  labs(title=titlecount, x=NULL, y=NULL,caption=source1) + # use the labels created above
-  scale_y_continuous(labels = scales::comma) + # set the scale for the y axis
-  scale_x_continuous(breaks=c(2000:2017)) + # set the scale for the years on the x axis
-  theme(panel.background = element_rect(fill = "white",colour = "grey50"), # choose background colors
-                              plot.caption = element_text(hjust = 0), # default was 1 #set caption position 
-                              plot.title = element_text(hjust = 0.5), # set title position
-                              axis.text.x = element_text(angle = -50, hjust = 0)) # adjust the x axis labels
-yearplot # display the year plot
+scatter=ggplot(final, aes(Registered,Governor, color=Location)) +
+  geom_point(size = 1) +
+   xlab("Registered Voters") + 
+  ylab("Democratic Gubernatorial Support")
+scatter
 ```
-
+Looks like people in Seattle heavily favored the democratic gubernatorial candidate.
 
 ### Democratic support
 
@@ -347,4 +347,20 @@ yearplot # display the year plot
 
 ```{r}
 # [YOUR CODE HERE]
+final2 = final %>% 
+  filter(Registered > 500)
+final2
+```
+
+```{r}
+lineplot=ggplot(final2, aes(x=fct_reorder(Precinct,President),y=President,group=Location,color=Location)) +
+   geom_line() +
+  geom_line(aes(y=Governor)) +
+  geom_line(aes(y=LT)) +
+   theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),)+
+  labs(y = "Percent Democratic Support",
+                x = "Precincts Ordered by Percent Support for Democratic Presidential Nominee")
+lineplot
 ```
