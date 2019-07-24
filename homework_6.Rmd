@@ -41,7 +41,7 @@ library(stringr)
 
 ```{r}
 setwd("/Users/cazvan/Downloads/open_data_year_one")
-folder = list.files()
+folder = list.files()w
 folder = folder[!folder %in% "2015_status_data.csv"]
 folder = folder[!folder %in% "README.txt"]
 folder
